@@ -1,11 +1,32 @@
 #include <stdio.h>
 #include <cstdlib>
+#include <cerrno>
 #include <cstdint>
 #include <algorithm>
 
 #include "../src/daemon/common.h"
 
 #define ALIGNMENT 64
+
+void* aligned_alloc(size_t alignment, size_t size) {
+    if (alignment % sizeof(void*) != 0) {
+        errno = EINVAL;
+        return NULL;
+    }
+    if (size == 0) {
+        size = 1;
+    }
+    void* mem;
+    if (posix_memalign(&mem, alignment, size) != 0) {
+        return NULL;
+    }
+    return mem;
+}
+
+void aligned_free(void* aligned_mem) {
+    free(aligned_mem);
+}
+
 
 void checkAlignment(char const * debugMessage, void* ptr)
 {

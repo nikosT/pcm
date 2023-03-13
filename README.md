@@ -73,9 +73,12 @@ git submodule update --init --recursive
 Install cmake then:
 
 ```
+For ARIS:
+module load gnu/8
+moudle load cmake # which is cmake version 3.12.1
 mkdir build
 cd build
-cmake ..
+cmake -DCMAKE_EXE_LINKER_FLAGS="-lrt" ..
 cmake --build .
 ```
 You will get all the utilities (pcm, pcm-memory, etc) in `build/bin` directory.
